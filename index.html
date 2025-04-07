@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>System Crash</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #0000aa;
+      color: white;
+      font-family: monospace;
+      font-size: 20px;
+      text-align: center;
+      height: 100%;
+      overflow: hidden;
+    }
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .countdown {
+      font-size: 30px;
+      color: #ff5555;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false" onkeydown="return false">
+  <div class="content">
+    <p>😵‍💫 فشل في النظام - يتم جمع معلومات الخطأ...</p>
+    <p class="countdown" id="timer">30</p>
+    <p>يرجى عدم إيقاف تشغيل الجهاز أثناء هذه العملية.</p>
+  </div>
+
+  <script>
+    // عدّ تنازلي
+    let seconds = 30;
+    const timer = document.getElementById("timer");
+
+    const interval = setInterval(() => {
+      seconds--;
+      timer.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(interval);
+        timer.textContent = "✅ تم جمع المعلومات";
+      }
+    }, 1000);
+
+    // منع الإغلاق
+    document.addEventListener("keydown", function(e) {
+      e.preventDefault();
+    });
+
+    document.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+    });
+
+    document.addEventListener("visibilitychange", function() {
+      if (document.visibilityState !== "visible") {
+        alert("🚫 لا يمكنك الخروج الآن!");
+      }
+    });
+  </script>
+</body>
+</html>
