@@ -14,12 +14,14 @@
       height: 100%;
       overflow: hidden;
     }
+
     .content {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
+
     .countdown {
       font-size: 30px;
       color: #ff5555;
@@ -27,41 +29,66 @@
     }
   </style>
 </head>
-<body oncontextmenu="return false" onkeydown="return false">
+<body>
   <div class="content">
-    <p>😵‍💫 فشل في النظام - يتم جمع معلومات الخطأ...</p>
-    <p class="countdown" id="timer">30</p>
-    <p>يرجى عدم إيقاف تشغيل الجهاز أثناء هذه العملية.</p>
+    <div>💻 System Failure Detected</div>
+    <div>🔍 يتم العمل على البحث عن الأخطاء...</div>
+    <div class="countdown" id="timer">30</div>
   </div>
 
   <script>
-    // عدّ تنازلي
     let seconds = 30;
-    const timer = document.getElementById("timer");
+    const timerElement = document.getElementById('timer');
 
-    const interval = setInterval(() => {
-      seconds--;
-      timer.textContent = seconds;
-      if (seconds <= 0) {
-        clearInterval(interval);
-        timer.textContent = "✅ تم جمع المعلومات";
+    function startCountdown() {
+      const interval = setInterval(() => {
+        seconds--;
+        timerElement.textContent = seconds;
+        if (seconds <= 0) {
+          clearInterval(interval);
+          exitFullScreen();
+          alert("تم الانتهاء. يمكنك الخروج الآن 😎");
+        }
+      }, 1000);
+    }
+
+    function enterFullScreen() {
+      const docElm = document.documentElement;
+      if (docElm.requestFullscreen) {
+        docElm.requestFullscreen();
+      } else if (docElm.mozRequestFullScreen) {
+        docElm.mozRequestFullScreen();
+      } else if (docElm.webkitRequestFullscreen) {
+        docElm.webkitRequestFullscreen();
+      } else if (docElm.msRequestFullscreen) {
+        docElm.msRequestFullscreen();
       }
-    }, 1000);
+    }
 
-    // منع الإغلاق
-    document.addEventListener("keydown", function(e) {
-      e.preventDefault();
-    });
-
-    document.addEventListener("contextmenu", function(e) {
-      e.preventDefault();
-    });
-
-    document.addEventListener("visibilitychange", function() {
-      if (document.visibilityState !== "visible") {
-        alert("🚫 لا يمكنك الخروج الآن!");
+    function exitFullScreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
       }
-    });
+    }
+
+    // منع المستخدم من الخروج أثناء العد
+    window.onbeforeunload = function () {
+      if (seconds > 0) {
+        return "لا يمكنك الخروج الآن!";
+      }
+    };
+
+    // تشغيل كل شيء
+    window.onload = () => {
+      enterFullScreen();
+      startCountdown();
+    };
   </script>
 </body>
 </html>
